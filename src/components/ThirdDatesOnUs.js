@@ -23,7 +23,7 @@ export function ThirdDatesOnUs() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full bg-[#FAFFE7] flex flex-col items-center gap-[16px] sm:gap-[20px] md:gap-[24px] lg:gap-[32px]">
+    <div className="w-full bg-[#FAFFE7] flex flex-col items-center gap-[16px] sm:gap-[20px] md:gap-[24px] lg:gap-[32px] px-4 sm:px-6 md:px-8 lg:px-[50px] py-[100px]">
       {/* Title */}
       <h2
         style={{
@@ -43,12 +43,12 @@ export function ThirdDatesOnUs() {
       {/* Card Grid */}
       <div className="flex flex-col items-center w-full gap-[16px]
         sm:flex-col sm:items-center sm:justify-center sm:gap-[20px] sm:mx-auto
-        md:flex-row md:items-stretch md:justify-center md:gap-[24px] md:max-w-[1216px]
-        lg:flex-row lg:items-stretch lg:justify-between lg:gap-[32px] lg:max-w-[1340px]">
+        md:flex-row md:items-stretch md:justify-center md:gap-[24px] md:w-[calc(100%+64px)] md:-mx-8
+        lg:flex-row lg:items-stretch lg:justify-between lg:gap-[32px] lg:w-full lg:mx-auto lg:max-w-[1340px]">
         {thirdDateSteps.map((card, index) => (
           <div
             key={index}
-            className="w-[358px] h-[202px] sm:w-[690px] sm:h-[246px] md:w-[380px] md:h-[350px] lg:w-[426px] lg:h-[450px] flex flex-col justify-end items-start rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px] border-[1.5px] border-[#211F20] bg-[#FAFFE7] relative p-[12px] sm:p-[16px] md:p-[20px] lg:p-[24px] shrink-0"
+            className="w-[358px] h-[202px] sm:w-[690px] sm:h-[246px] md:w-[calc(33.33%-16px)] md:h-[350px] lg:w-[426px] lg:h-[450px] flex flex-col justify-end items-start rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px] border-[1.5px] border-[#211F20] bg-[#FAFFE7] relative p-[12px] sm:p-[16px] md:p-[20px] lg:p-[24px] shrink-0"
           >
             {/* Icon container in top left corner */}
             <div
@@ -137,7 +137,7 @@ export function ThirdDatesOnUs() {
       </div>
       {/* Image Section */}
       <div
-        className="w-[358px] h-[259px] sm:w-[696px] sm:h-[217px] md:w-[1216px] md:h-[350px] lg:w-[1340px] lg:h-[450px] relative flex flex-col justify-end items-end overflow-hidden rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px]"
+        className="w-[358px] h-[259px] sm:w-[690px] sm:h-[217px] md:w-[calc(100%+64px)] md:h-[350px] lg:w-[1340px] lg:h-[450px] relative flex flex-col justify-end items-end overflow-hidden rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px] md:-mx-8"
       >
         {/* Background image with overlays */}
         <div className="absolute inset-0">

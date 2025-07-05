@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const HIWDescription = () => {
     return (
         <div className="w-full bg-[#FAFFE7] py-[100px]">
-            <div className="max-w-[1280px] mx-auto px-[100px]">
+            <div className="w-full px-4 sm:px-6 md:px-10 lg:px-[100px]">
                 <div className="flex flex-col items-center text-center">
                     <h1 
                         style={{
@@ -93,4 +93,4 @@ const HIWDescription = () => {
     );
 };
 
-export default HIWDescription; 
+export default HIWDescription;

@@ -15,7 +15,17 @@ const GradientDescription = ({
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
-            className="text-left rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px] w-[358px] sm:w-[696px] md:w-[1216px] lg:w-[1340px] pl-[16px] sm:pl-[24px] md:pl-[32px] lg:pl-[50px] pr-[16px] sm:pr-[24px] md:pr-[32px] lg:pr-[50px] pt-[12px] sm:pt-[16px] md:pt-[24px] lg:pt-[32px] pb-[16px] sm:pb-[24px] md:pb-[32px] lg:pb-[50px]"
+            className="
+                w-full
+                lg:max-w-[1340px]
+                px-4 sm:px-6 md:px-8 lg:px-[50px]
+                py-4 sm:py-6 md:py-8 lg:py-[32px]
+                mx-auto
+                rounded-[8px] sm:rounded-[10px] md:rounded-[12px] lg:rounded-[16px]
+                text-left
+                md:w-[calc(100%+32px)] lg:w-[calc(100%+50px)]
+                md:-mx-4 lg:-mx-[25px]
+            "
         >
             <h2 
                 style={{
@@ -23,7 +33,11 @@ const GradientDescription = ({
                     fontWeight: 520,
                     lineHeight: '120%',
                 }}
-                className="text-[24px] sm:text-[24px] md:text-[32px] lg:text-[40px] text-[#211F20] mb-[16px] sm:mb-[16px] md:mb-[20px] lg:mb-[24px]"
+                className="
+                    text-[24px] sm:text-[24px] md:text-[32px] lg:text-[40px]
+                    text-[#211F20]
+                    mb-[16px] sm:mb-[16px] md:mb-[20px] lg:mb-[24px]
+                "
             >
                 → {headerText}
             </h2>
@@ -33,7 +47,10 @@ const GradientDescription = ({
                     fontWeight: 400,
                     lineHeight: '150%',
                 }}
-                className="text-[12px] sm:text-[12px] md:text-[14px] lg:text-[16px] text-[#211F20]"
+                className="
+                    text-[12px] sm:text-[12px] md:text-[14px] lg:text-[16px]
+                    text-[#211F20]
+                "
             >
                 {bodyText}
             </p>
@@ -41,4 +58,4 @@ const GradientDescription = ({
     );
 };
 
-export default GradientDescription; 
+export default GradientDescription;
