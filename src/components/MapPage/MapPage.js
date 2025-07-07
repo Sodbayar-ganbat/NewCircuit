@@ -74,17 +74,17 @@ const MapPage = () => {
         heartColor="#FAFFE7"
       />
       <div style={{ position: "relative", width: "100%" }}>
-        <Map cities={cities} filter={filter} />
-        <div
-          style={{
-            position: "absolute",
+      <Map cities={cities} filter={filter} />
+      <div
+        style={{
+          position: "absolute",
             top: "0px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 1000,
-          }}
-        >
-          <SearchBar cities={cities} onSearch={handleSearch} />
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1000,
+        }}
+      >
+        <SearchBar cities={cities} onSearch={handleSearch} />
         </div>
       </div>
     </div>

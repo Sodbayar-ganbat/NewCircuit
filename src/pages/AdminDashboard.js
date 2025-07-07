@@ -6,6 +6,7 @@ import AdminCoupons from "../components/Admin/AdminPages/AdminCoupons";
 import AdminUserManagement from "../components/Admin/AdminPages/AdminUserManagement";
 import AdminBusinessManagement from "../components/Admin/AdminPages/AdminBusinessManagement";
 import AdminAnalytics from "../components/Admin/AdminPages/AdminAnalytics";
+import AdminEvents from "../components/Admin/AdminPages/AdminEvents";
 import AdminHeader from "../components/Admin/AdminHelperComponents/AdminHeader";
 import AdminSidebar from "../components/Admin/AdminHelperComponents/AdminSidebar";
 // Import other admin components as needed
@@ -48,6 +49,7 @@ const AdminDashboard = () => {
           <Route path="/coupons/*" element={<AdminCoupons />} />
           <Route path="/users/*" element={<AdminUserManagement />} />
           <Route path="/businesses/*" element={<AdminBusinessManagement />} />
+          <Route path="/events/*" element={<AdminEvents />} />
           <Route path="/analytics/*" element={<AdminAnalytics />} />
         </Routes>
       </div>

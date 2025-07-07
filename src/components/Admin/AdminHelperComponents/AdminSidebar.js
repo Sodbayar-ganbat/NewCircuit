@@ -39,6 +39,12 @@ const AdminSidebar = () => {
       cName: "nav-text",
     },
     {
+      title: "Events Management",
+      path: "/admin-dashboard/events",
+      icon: <FaIcons.FaCalendarAlt />,
+      cName: "nav-text",
+    },
+    {
       title: "User Management",
       path: "/admin-dashboard/users",
       icon: <FaIcons.FaUsers />,

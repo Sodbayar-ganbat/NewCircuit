@@ -27,6 +27,7 @@ const AdminHeader = (props) => {
     "/admin-dashboard/coupons": "Coupons",
     "/admin-dashboard/users": "User Management",
     "/admin-dashboard/businesses": "Business Management",
+    "/admin-dashboard/events": "Events Management",
     "/admin-dashboard/analytics": "Analytics",
     "/admin-dashboard/settings": "Settings"
   };

@@ -5,6 +5,7 @@ import { deleteUser, getAuth, signInWithEmailAndPassword, EmailAuthProvider, rea
 import { FaSearch, FaTrash, FaUserShield } from 'react-icons/fa';
 import { IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import AdminUserDetailModal from './AdminUserDetailModal';
 
 const AdminUserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +15,12 @@ const AdminUserManagement = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showUserDetailModal, setShowUserDetailModal] = useState(false);
+  const [selectedUserDetail, setSelectedUserDetail] = useState(null);
+  // Events modal state
+  const [showEventsModal, setShowEventsModal] = useState(false);
+  const [loadingEvents, setLoadingEvents] = useState(false);
+  const [userEvents, setUserEvents] = useState([]);
 
   useEffect(() => {
     fetchUsers();
@@ -97,6 +104,22 @@ const AdminUserManagement = () => {
     }
   };
 
+  // Show events for a user
+  const handleShowEvents = async (user) => {
+    setSelectedUser(user);
+    setShowEventsModal(true);
+    setLoadingEvents(true);
+    try {
+      const eventsSnap = await getDocs(collection(db, 'users', user.id, 'signedUpEvents'));
+      const eventsList = eventsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setUserEvents(eventsList);
+    } catch (error) {
+      console.error('Error fetching user events:', error);
+    } finally {
+      setLoadingEvents(false);
+    }
+  };
+
   const filteredUsers = users.filter(user => 
     user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -126,17 +149,18 @@ const AdminUserManagement = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Events</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {loading ? (
               <tr>
-                <td colSpan="5" className="text-center py-4">Loading...</td>
+                <td colSpan="6" className="text-center py-4">Loading...</td>
               </tr>
             ) : filteredUsers.map(user => (
               <tr key={user.id} className={user.id === auth.currentUser?.uid ? 'bg-blue-50' : ''}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap cursor-pointer text-blue-700 hover:underline" onClick={() => { setSelectedUserDetail(user); setShowUserDetailModal(true); }}>
                   {user.firstName} {user.lastName}
                   {user.id === auth.currentUser?.uid && (
                     <span className="ml-2 text-xs text-blue-600">(Me)</span>
@@ -158,6 +182,15 @@ const AdminUserManagement = () => {
                     <FaUserShield className="mr-1" />
                     {adminUsers.includes(user.id) ? 'Admin' : 'User'}
                   </span>
+                </td>
+                {/* Events column */}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    onClick={() => handleShowEvents(user)}
+                    className="px-3 py-1 bg-[#0043F1] text-white text-sm rounded-lg hover:bg-[#0034BD] transition-colors"
+                  >
+                    Events
+                  </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center space-x-3">
@@ -235,6 +268,58 @@ const AdminUserManagement = () => {
                 onClick={confirmMakeAdmin}
               >
                 Make Admin
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* User Detail Modal */}
+      {showUserDetailModal && selectedUserDetail && (
+        <AdminUserDetailModal
+          isOpen={showUserDetailModal}
+          onClose={() => setShowUserDetailModal(false)}
+          user={selectedUserDetail}
+        />
+      )}
+
+      {/* User Events Modal */}
+      {showEventsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 className="text-2xl font-semibold mb-4">Events for {selectedUser?.firstName} {selectedUser?.lastName}</h2>
+            {loadingEvents ? (
+              <div className="text-center py-8">Loading...</div>
+            ) : userEvents.length === 0 ? (
+              <div className="text-center py-8 text-gray-600">No events found.</div>
+            ) : (
+              <table className="min-w-full text-sm table-fixed">
+                <thead className="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th className="px-4 py-2 text-left font-medium text-gray-600 w-1/4">Name</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-600 w-1/4">Date</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-600 w-1/4">Time</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-600 w-1/4">Event ID</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {userEvents.map(ev => (
+                    <tr key={ev.id}>
+                      <td className="px-4 py-2 whitespace-nowrap w-1/4 truncate">{ev.eventTitle || '-'}</td>
+                      <td className="px-4 py-2 whitespace-nowrap w-1/4 truncate">{ev.eventDate || '-'}</td>
+                      <td className="px-4 py-2 whitespace-nowrap w-1/4 truncate">{ev.eventTime || '-'}</td>
+                      <td className="px-4 py-2 whitespace-nowrap w-1/4 truncate">{ev.eventID || ev.id}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            <div className="flex justify-end mt-6">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                onClick={() => setShowEventsModal(false)}
+              >
+                Close
               </button>
             </div>
           </div>

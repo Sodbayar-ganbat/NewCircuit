@@ -53,7 +53,8 @@ const VerifyEmail = () => {
                     createdAt: new Date(),
                     image: userData.image,
                     isActive: true,
-                    location: userData.location
+                    location: userData.location,
+                    datesRemaining: 100 // Set initial dates remaining
                 });
 
             } catch (createErr) {
