@@ -1,51 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { IoChevronBackCircleOutline } from 'react-icons/io5';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../../pages/firebaseConfig';
 import {DashMessages} from './DashMessages';
 
 const DashMyConnections = () => {
   const [selectedConnection, setSelectedConnection] = useState(null);
+  const [connections, setConnections] = useState([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchConnections = async () => {
       try {
-        const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          const connections = userData.connections || [];
-          connections.forEach(async connection => {
-            const convoId =
-              auth.currentUser.uid < connection.id
-                ? `${auth.currentUser.uid}${connection.id}`
-                : `${connection.id}${auth.currentUser.uid}`;
-            const convoRef = doc(db, 'conversations', convoId);
-            const convoSnap = await getDoc(convoRef);
-            if (!convoSnap.exists()) {
-              await setDoc(convoRef, {
-                conversationId: convoId,
-                userIds: [auth.currentUser.uid, connection.id],
-                messages: [],
-              });
-            }
-          });
-        }
+        const user = auth.currentUser;
+        if (!user) return;
+        const connectionsCol = collection(db, 'users', user.uid, 'connections');
+        const snapshot = await getDocs(connectionsCol);
+        const connectionsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setConnections(connectionsList);
       } catch (err) {
         console.error('Error fetching connections:', err);
       }
     };
-
-    if (auth.currentUser) fetchUserData();
+    fetchConnections();
   }, []);
-
-  const connections = [
-    { id: 1, name: 'Alice Johnson', compatibility: 85, img: 'https://randomuser.me/api/portraits/women/1.jpg' },
-    { id: 2, name: 'Michael Smith', compatibility: 72, img: 'https://randomuser.me/api/portraits/men/2.jpg' },
-    { id: 3, name: 'Sophia Martinez', compatibility: 50, img: 'https://randomuser.me/api/portraits/women/3.jpg' },
-    { id: 'mSkhXidLxpW7QZFJgkERDSI8N8m2', name: 'Marco Polo', compatibility: 100, img: 'https://randomuser.me/api/portraits/men/1.jpg' },
-    { id: 's1K8XeLj4PUXWLEEb5WLwGFtkx73', name: 'Marco Berk Monfiglio', compatibility: 100, img: 'https://randomuser.me/api/portraits/men/3.jpg' },
-  ];
 
   const ConnectionList = () => (
     <div className="flex flex-col px-7 w-full max-md:px-5">
