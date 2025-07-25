@@ -6,7 +6,8 @@ const HeaderBar = ({
     title = '', 
     logo,
     logoHeight = 'h-32',
-    titleSize = 'text-6xl'
+    titleSize = 'text-6xl',
+    onBack
 }) => {
     const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const HeaderBar = ({
     <div className="flex justify-start items-center">
       {showBack && (
         <button 
-          onClick={() => navigate(-1)}
+          onClick={onBack ? onBack : () => navigate(-1)}
           className="flex items-center text-[#F3F3F3] hover:text-[#F3F3F3] transition-colors mr-4 ml-0"
         >
           <svg 

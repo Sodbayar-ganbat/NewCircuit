@@ -1,0 +1,230 @@
+.quizBg {
+  min-height: 100vh;
+  height: 100vh;
+  background: #211F20;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 40vh;
+  margin-top: -450px;
+}
+
+.topBar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 24px 0 0 0;
+  align-self: stretch;
+  gap: 0;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.backBtn {
+  display: flex;
+  align-items: flex-end;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 1rem;
+  margin-bottom: 18px;
+  padding: 0;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--Sea_Salt, #F3F3F3);
+}
+
+.progressBarMarginLayout {
+  display: flex;
+  width: 100%;
+  padding: var(--TopBottom-S, 50px) 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--Gap-L, 50px);
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.progressBarBg {
+  margin-inline: 11rem;
+  margin-top: 16px;
+  margin-bottom: 12px;
+  width: calc(100% - 22rem);
+  height: 6px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.10);
+  position: relative;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .progressBarBg {
+    height: 5px;
+    margin-inline: 2rem;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    width: calc(100% - 4rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .topBar {
+    padding: 12px;
+  }
+  .progressBarBg {
+    height: 4px;
+    margin-inline: 0.5rem;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    width: calc(100% - 1rem);
+  }
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 24px;
+  background: #E2FF65;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.4s;
+}
+
+.question {
+  align-self: stretch;
+  color: var(--Sea_Salt, #F3F3F3);
+  text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 110%;
+  margin-bottom: 32px;
+}
+
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.optionBtn {
+  display: flex;
+  min-width: 450px;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  background: var(--Sea_Salt, #F3F3F3);
+  color: #211F20;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.optionBtn.selected {
+  background: #E2FF65;
+  color: #211F20;
+}
+
+.locationText {
+  color: var(--Sea_Salt, #F3F3F3);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  margin-left: 0.75rem;
+}
+
+.doneBtn {
+  background: #E2FF65;
+  color: #211F20;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 12px 32px;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  transition: background 0.2s;
+}
+
+.doneBtn:hover {
+  background: #d0e95a;
+}
+
+.finalMessage {
+  align-self: stretch;
+  color: var(--Sea_Salt, #F3F3F3);
+  text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 110%;
+  margin-bottom: 32px;
+}
+
+.dashboardBtn {
+  display: flex;
+  min-width: 450px;
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  background: var(--Sea_Salt, #F3F3F3);
+  color: #211F20;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  transition: background 0.2s;
+}
+
+.dashboardBtn:hover {
+  background: #e6e6e6;
+}
+
+@media (max-width: 600px) {
+  .optionBtn {
+    min-width: 220px;
+    font-size: 18px;
+    padding: 10px 12px;
+  }
+  .question {
+    font-size: 28px;
+  }
+} 

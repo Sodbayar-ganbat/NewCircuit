@@ -36,7 +36,7 @@ const SlidingBar = ({
 
   return (
     <div className="sliding-bar" data-testid="sliding-bar" style={{ background }} ref={containerRef}>
-      <div className="sliding-bar__marquee">
+    <div className="sliding-bar__marquee">
         {/* Hidden phrase for measurement only */}
         <span
           ref={phraseRef}
@@ -71,10 +71,10 @@ const SlidingBar = ({
               )}
             </span>
           ))}
-        </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default SlidingBar; 

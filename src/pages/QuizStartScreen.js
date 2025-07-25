@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const QuizStartScreen = () => {
     const navigate = useNavigate();
+    const handleBack = () => navigate('/locations');
     return (
         <div className="min-h-screen flex flex-col">
             <HeaderBar 
@@ -15,6 +16,7 @@ const QuizStartScreen = () => {
                 logoHeight="h-20"
                 titleSize='text-4xl'
                 className = 'w-full flex justify-center items-center text-center relative'
+                onBack={handleBack}
             />
 
             {/* Main content */}
