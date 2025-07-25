@@ -31,9 +31,9 @@ const Dashboard = () => {
   }, [location, currPath]);
 
   return (
-    <div className="flex gap-5 p-5 min-h-screen bg-gray-50 max-md:flex-col">
+    <div className="flex min-h-screen max-md:flex-col">
       <Sidebar />
-      <div className="flex flex-col flex-1 gap-8">
+      <div className="flex flex-col flex-1 bg-white">
         <Header path={currPath} />
           <Routes>
             <Route path="/" element={<DashHome />}/> 

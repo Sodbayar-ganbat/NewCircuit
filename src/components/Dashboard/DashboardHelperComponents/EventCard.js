@@ -4,6 +4,8 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { auth } from '../../../pages/firebaseConfig';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../pages/firebaseConfig';
+import { ReactComponent as LocationIcon } from '../../../images/location.svg';
+import { ReactComponent as TimerIcon } from '../../../images/timer.svg';
 
 function getDateParts(dateString, timeString, timeZone) {
   const normalizedTime = timeString ? timeString.replace(/am|pm/i, m => m.toUpperCase()).trim() : '';
@@ -85,7 +87,6 @@ const EventCard = ({ event, type, userGender, onSignUp, datesRemaining }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  console.log('EventCard received:', event);
   // Prefer Remo timestamp if available
   const dateParts = event.startTime ? getDatePartsFromMillis(event.startTime) : getDateParts(event.date, event.time, event.timeZone);
   const { dayOfWeek, day, month, timeLabel } = dateParts;
@@ -93,269 +94,203 @@ const EventCard = ({ event, type, userGender, onSignUp, datesRemaining }) => {
   return (
     <>
       <div
-        className={
-          "flex-col items-center p-8 rounded-2xl mr-[30px] bg-[#F3F3F3]"
+        className="flex flex-col items-start rounded-[16px] border p-3 sm:p-4 xl:p-5 2xl:p-6 gap-4 sm:gap-5 xl:gap-6 2xl:gap-8 w-full"
+        style={
+          type === "signup"
+            ? {
+                border: "1px solid rgba(33, 31, 32, 0.10)",
+                borderRadius: "16px",
+                background:
+                  "radial-gradient(50% 50% at 50% 50%, rgba(226,255,101,0.50) 0%, rgba(210,255,215,0.50) 100%)"
+              }
+            : {
+                border: "1px solid rgba(33, 31, 32, 0.10)",
+                borderRadius: "16px",
+                background:
+                  "radial-gradient(50% 50% at 50% 50%, rgba(176,238,255,0.50) 0%, rgba(231,233,255,0.50) 100%)"
+              }
         }
       >
-        {/* Date Display */}
-        <div style={{ border: '1px solid #222', borderRadius: '16px', width: 70, margin: '0 auto', padding: '8px 0', background: 'rgba(200,220,255,0.1)' }}>
-          <div style={{ textAlign: 'center', fontWeight: 500, fontSize: 16 }}>{dayOfWeek}</div>
-          <div style={{ textAlign: 'center', fontWeight: 700, fontSize: 32 }}>{day}</div>
-          <div style={{ textAlign: 'center', fontWeight: 500, fontSize: 16 }}>{month}</div>
-        </div>
-        {/* Event Title */}
-        <div className="text-xl font-medium text-center text-black mt-2 mb-1">
-          {event.name || event.title || 'Event'}
-        </div>
-        {/* Age Range */}
+
+
+        {/* Remo Event Title - above age range */}
+        <div className="border-3 border-black p-2 rounded mb-[-20px]">  
+            {event.title && (
+              <div className="font-medium text-[#211F20] font-bricolage leading-[130%] text-[14px] sm:text-[16px] lg:text-[20px] 2xl:text-[24px]">
+                {event.title}
+              </div>
+            )}
+          </div>
+        
+        {/* Age Range - Top */}
         {event.ageRange && (
-          <div className="text-base font-semibold text-center text-gray-700 mt-1 mb-1">
-            Ages {event.ageRange}
+          <div className="border-3 border-black p-2 rounded">
+            <div className="
+              font-medium
+              text-[#211F20]
+              font-bricolage
+              leading-[130%]
+              text-[14px] sm:text-[16px] lg:text-[20px] 2xl:text-[24px]
+            ">
+              Ages {event.ageRange}
+            </div>
           </div>
         )}
-        {/* Location */}
-        <div className="text-base text-slate-600 text-center mt-2">
-          {event.location && <span>{event.location} <br /></span>}
+
+        {/* Main Content with Date and Event Info */}
+        <div className="border-3 border-black p-2 rounded w-full">
+          <div className="flex gap-4 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-6 w-full">
+            {/* Date Box */}
+            <div className="
+              flex-shrink-0 
+              border border-[#211F20] 
+              rounded-[8px] sm:rounded-[10px] lg:rounded-[12px] xl:rounded-[16px]
+              p-3 
+              text-center 
+              w-16
+              h-fit
+              flex flex-col items-center
+            ">
+              <div className="
+                font-medium
+                text-[#211F20]
+                font-bricolage
+                leading-[130%]
+                uppercase
+                text-[12px] sm:text-[12px] xl:text-[14px] 2xl:text-[16px]
+              ">
+                {dayOfWeek}
+              </div>
+              <div className="
+                font-medium
+                text-[#211F20]
+                font-bricolage
+                leading-normal
+                text-[28px] sm:text-[30px] xl:text-[36px] 2xl:text-[40px]
+              ">
+                {day}
+              </div>
+              <div className="text-xs font-semibold text-gray-600">
+                {month}
+              </div>
+            </div>
+
+            {/* Event Info */}
+            <div className="flex-1 flex flex-col gap-2 sm:gap-2 md:gap-[10px] lg:gap-3">
+              {/* Location */}
+              <div className="flex items-center gap-2">
+                <LocationIcon className="w-4 h-4 text-gray-600" />
+                <span className="
+                  font-medium
+                  text-[#211F20]
+                  font-bricolage
+                  leading-[130%]
+                  uppercase
+                  text-[12px] sm:text-[12px] lg:text-[14px] 2xl:text-[16px]
+                ">
+                  {event.location}
+                </span>
+              </div>
+              
+              {/* Time */}
+              <div className="flex items-center gap-2">
+                <TimerIcon className="w-4 h-4 text-gray-600" />
+                <span className="
+                  font-medium
+                  text-[#211F20]
+                  font-bricolage
+                  leading-[130%]
+                  uppercase
+                  text-[12px] sm:text-[12px] lg:text-[14px] 2xl:text-[16px]
+                ">
+                  {event.eventType || ''}{event.eventType && timeLabel ? ' @ ' : ''}{timeLabel || ''}
+                </span>
+              </div>
+              
+              {/* Open Spots Group */}
+              <div className="flex flex-col gap-0">
+                <div className="text-sm text-gray-600">
+                  Open Spots for Men: {(() => {
+                    const total = Number(event.menSpots) || 0;
+                    const signedUp = Number(event.menSignupCount) || 0;
+                    return `${Math.max(total - signedUp, 0)}/${total}`;
+                  })()}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Open Spots for Women: {(() => {
+                    const total = Number(event.womenSpots) || 0;
+                    const signedUp = Number(event.womenSignupCount) || 0;
+                    return `${Math.max(total - signedUp, 0)}/${total}`;
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Event Type and Time */}
-        {(event.eventType || timeLabel) && (
-          <div className="text-base text-slate-600 text-center mt-2">
-            {event.eventType || ''}{event.eventType && timeLabel ? ' @ ' : ''}{timeLabel || ''}
-          </div>
-        )}
-        {/* TimeZone */}
-        <div className="text-base text-slate-600 text-center mt-2">
-          {event.timeZone && <span>Time Zone: {event.timeZone}</span>}
-        </div>
-        {/* Spots Info */}
-        <div className="text-base text-slate-600 text-center mt-2">
-          <span>Open Spots for Men: {(() => {
-            const total = Number(event.menSpots) || 0;
-            const signedUp = Number(event.menSignupCount) || 0;
-            return `${Math.max(total - signedUp, 0)}/${total}`;
-          })()}</span>
-          <br />
-          <span>Open Spots for Women: {(() => {
-            const total = Number(event.womenSpots) || 0;
-            const signedUp = Number(event.womenSignupCount) || 0;
-            return `${Math.max(total - signedUp, 0)}/${total}`;
-          })()}</span>
-        </div>
-        {/* Sign Up / Wait List Button or Join Now for Upcoming */}
-        {type === 'upcoming' ? (
-          <button
-            className="text-xs mt-5 p-1 text-center text-blue-500 cursor-pointer bg-white rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={joining}
-            onClick={async () => {
-              if (!event?.eventID) {
-                alert('Missing event ID');
+        {/* Sign Up Button */}
+        <button
+          disabled={joining}
+          onClick={async () => {
+            if (!event?.eventID) {
+              alert('Missing event ID');
+              return;
+            }
+            try {
+              setJoining(true);
+              if (onSignUp) {
+                console.log('[JOIN NOW] Calling onSignUp for event:', event);
+                await onSignUp(event);
+                console.log('[JOIN NOW] onSignUp finished');
+              }
+              const functions = getFunctions();
+              console.log('About to call getEventData');
+              const getEventData = httpsCallable(functions, 'getEventData'); // returns full event
+              const res = await getEventData({ eventId: event.eventID });
+              console.log('getEventData response:', res);
+              const { event: remoEvent } = res.data || {};
+              if (!remoEvent) {
+                alert('Event data not available yet.');
                 return;
               }
-              try {
-                setJoining(true);
-                if (onSignUp) {
-                  console.log('[JOIN NOW] Calling onSignUp for event:', event);
-                  await onSignUp(event);
-                  console.log('[JOIN NOW] onSignUp finished');
-                }
-                const functions = getFunctions();
-                console.log('About to call getEventData');
-                const getEventData = httpsCallable(functions, 'getEventData'); // returns full event
-                const res = await getEventData({ eventId: event.eventID });
-                console.log('getEventData response:', res);
-                const { event: remoEvent } = res.data || {};
-                if (!remoEvent) {
-                  alert('Event data not available yet.');
-                  return;
-                }
-                // Record the latest event this user joined
-                if (auth.currentUser) {
-                  await setDoc(
-                    doc(db, 'users', auth.currentUser.uid),
-                    {
-                      latestEventId: event.eventID,
-                    },
-                    { merge: true }
-                  );
-                }
-                // Build join URL on the client
-                const joinUrl = `https://live.remo.co/e/${remoEvent.code}`;
-                window.open(joinUrl, '_blank');
-              } catch (err) {
-                console.error('Error fetching join URL:', err);
-                alert('Unable to fetch join link. Please try again later.');
-              } finally {
-                setJoining(false);
+              // Record the latest event this user joined
+              if (auth.currentUser) {
+                await setDoc(
+                  doc(db, 'users', auth.currentUser.uid),
+                  {
+                    latestEventId: event.eventID,
+                  },
+                  { merge: true }
+                );
               }
-            }}
-          >
-            {joining ? 'Loading…' : 'Join Now'}
-          </button>
-        ) : (() => {
-          // Parse numbers for comparison
-          const menCount = Number(event.menSignupCount);
-          const menMax = Number(event.menSpots);
-          const womenCount = Number(event.womenSignupCount);
-          const womenMax = Number(event.womenSpots);
-          // Use userGender prop for logic
-          if (typeof userGender === 'string' && userGender.toLowerCase() === 'female') {
-            if (womenMax > 0 && womenCount < womenMax) {
-              return (
-                <button
-                  className="text-xs mt-5 p-1 text-center text-blue-500 cursor-pointer bg-white rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={!(Number.isInteger(datesRemaining) && datesRemaining > 0) || signUpClicked}
-                  onClick={async () => { 
-                    try {
-                      console.log('🔄 Starting sign-up process...');
-                      setSignUpClicked(true);
-                      
-                      // Call the original onSignUp function first
-                      console.log('📝 Calling original onSignUp function...');
-                      await onSignUp(event);
-                      console.log('✅ Original sign-up completed');
-                      
-                      // Then add user to Remo event if eventID exists
-                      if (event.eventID && auth.currentUser) {
-                        console.log('🔄 Adding user to Remo event...');
-                        const functions = getFunctions();
-                        const addUserToRemoEvent = httpsCallable(functions, 'addUserToRemoEvent');
-                        
-                        await addUserToRemoEvent({ 
-                          eventId: event.eventID, 
-                          userEmail: auth.currentUser.email 
-                        });
-                        console.log('✅ User added to Remo event successfully');
-                        console.log('🎉 Showing success modal...');
-                        setShowSuccessModal(true);
-                      } else {
-                        console.log('⚠️ No eventID or user not logged in, skipping Remo integration');
-                        setShowSuccessModal(true);
-                      }
-                    } catch (error) {
-                      console.error('❌ Error signing up for event:', error);
-                      setSignUpClicked(false);
-                      setErrorMessage('Sign up is not working. Please try again later.');
-                      setShowErrorModal(true);
-                    }
-                  }}
-                >
-                  Sign Up
-                </button>
-              );
-            } else {
-              return (
-                <div className="text-xs mt-5 p-1 text-center text-blue-500 bg-white rounded-xl w-full opacity-50 cursor-not-allowed">
-                  Join Wait List
-                </div>
-              );
+              // Do NOT redirect to Remo site anymore
+              // const joinUrl = `https://live.remo.co/e/${remoEvent.code}`;
+              // window.open(joinUrl, '_blank');
+            } catch (err) {
+              console.error('Error fetching join URL:', err);
+              alert('Unable to fetch join link. Please try again later.');
+            } finally {
+              setJoining(false);
             }
-          } else if (typeof userGender === 'string' && userGender.toLowerCase() === 'male') {
-            if (menMax > 0 && menCount < menMax) {
-              return (
-                <button
-                  className="text-xs mt-5 p-1 text-center text-blue-500 cursor-pointer bg-white rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={datesRemaining === 0 || signUpClicked}
-                  onClick={async () => { 
-                    try {
-                      console.log('🔄 Starting sign-up process...');
-                      setSignUpClicked(true);
-                      
-                      // Call the original onSignUp function first
-                      console.log('📝 Calling original onSignUp function...');
-                      await onSignUp(event);
-                      console.log('✅ Original sign-up completed');
-                      
-                      // Then add user to Remo event if eventID exists
-                      if (event.eventID && auth.currentUser) {
-                        console.log('🔄 Adding user to Remo event...');
-                        const functions = getFunctions();
-                        const addUserToRemoEvent = httpsCallable(functions, 'addUserToRemoEvent');
-                        
-                        await addUserToRemoEvent({ 
-                          eventId: event.eventID, 
-                          userEmail: auth.currentUser.email 
-                        });
-                        console.log('✅ User added to Remo event successfully');
-                        console.log('🎉 Showing success modal...');
-                        setShowSuccessModal(true);
-                      } else {
-                        console.log('⚠️ No eventID or user not logged in, skipping Remo integration');
-                        setShowSuccessModal(true);
-                      }
-                    } catch (error) {
-                      console.error('❌ Error signing up for event:', error);
-                      setSignUpClicked(false);
-                      setErrorMessage('Sign up is not working. Please try again later.');
-                      setShowErrorModal(true);
-                    }
-                  }}
-                >
-                  Sign Up
-                </button>
-              );
-            } else {
-              return (
-                <div className="text-xs mt-5 p-1 text-center text-blue-500 bg-white rounded-xl w-full opacity-50 cursor-not-allowed">
-                  Join Wait List
-                </div>
-              );
-            }
-          } else {
-            // fallback: allow sign up if either has space
-            const hasSpace = (menMax > 0 && menCount < menMax) || (womenMax > 0 && womenCount < womenMax);
-            if (hasSpace) {
-              return (
-                <button
-                  className="text-xs mt-5 p-1 text-center text-blue-500 cursor-pointer bg-white rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={datesRemaining === 0 || signUpClicked}
-                  onClick={async () => { 
-                    try {
-                      console.log('🔄 Starting sign-up process...');
-                      setSignUpClicked(true);
-                      
-                      // Call the original onSignUp function first
-                      console.log('📝 Calling original onSignUp function...');
-                      await onSignUp(event);
-                      console.log('✅ Original sign-up completed');
-                      
-                      // Then add user to Remo event if eventID exists
-                      if (event.eventID && auth.currentUser) {
-                        console.log('🔄 Adding user to Remo event...');
-                        const functions = getFunctions();
-                        const addUserToRemoEvent = httpsCallable(functions, 'addUserToRemoEvent');
-                        
-                        await addUserToRemoEvent({ 
-                          eventId: event.eventID, 
-                          userEmail: auth.currentUser.email 
-                        });
-                        console.log('✅ User added to Remo event successfully');
-                        console.log('🎉 Showing success modal...');
-                        setShowSuccessModal(true);
-                      } else {
-                        console.log('⚠️ No eventID or user not logged in, skipping Remo integration');
-                        setShowSuccessModal(true);
-                      }
-                    } catch (error) {
-                      console.error('❌ Error signing up for event:', error);
-                      setSignUpClicked(false);
-                      setErrorMessage('Sign up is not working. Please try again later.');
-                      setShowErrorModal(true);
-                    }
-                  }}
-                >
-                  Sign Up
-                </button>
-              );
-            } else {
-              return (
-                <div className="text-xs mt-5 p-1 text-center text-blue-500 bg-white rounded-xl w-full opacity-50 cursor-not-allowed">
-                  Join Wait List
-                </div>
-              );
-            }
-          }
-        })()}
+          }}
+          className={`
+            bg-[#211F20] 
+            text-white 
+            font-medium 
+            hover:bg-gray-800 
+            transition-colors 
+            text-left
+            rounded-lg
+            py-2 sm:py-2 xl:py-2 2xl:py-2
+            px-6 sm:px-5 xl:px-5 2xl:px-5
+            font-poppins
+            leading-normal
+            text-[12px] sm:text-[12px] lg:text-[14px] 2xl:text-[16px]
+            ${joining ? 'opacity-60 cursor-not-allowed' : ''}
+          `}
+        >
+          {joining ? 'Loading…' : (type === "signup" ? "Sign Up" : "Join Now")}
+        </button>
       </div>
 
       {/* Success Modal */}
